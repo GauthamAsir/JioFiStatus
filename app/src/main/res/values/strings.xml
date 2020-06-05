@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">JioFi Status</string>
+    <string name="battery_status">Battery Status</string>
+    <string name="channel_id">battery_notification</string>
+    <string name="upload_speed">Upload Speed</string>
+    <string name="download_speed">Download Speed</string>
+</resources>

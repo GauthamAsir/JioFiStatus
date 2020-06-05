@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity"
+    android:animateLayoutChanges="true">
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/error_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="21sp"
+        android:text="@string/app_name"
+        android:padding="12dp"
+        android:visibility="gone"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="12dp"
+        android:elevation="12dp"
+        app:cardCornerRadius="24dp"
+        android:id="@+id/tools_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <RelativeLayout
+                        android:id="@+id/c1"
+                        android:layout_width="120dp"
+                        android:layout_height="60dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/battery"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="@string/battery_status"/>
+
+                        <ProgressBar
+                            android:id="@+id/battery_progressbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:progress="0"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="26dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            style="@android:style/Widget.ProgressBar.Horizontal"
+                            android:progressTint="@android:color/transparent"
+                            android:progressBackgroundTint="@android:color/transparent"/>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/battery_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="21sp"
+                        android:text=""/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/signal_strength"
+                        android:layout_width="120dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_baseline_signal_cellular"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/battery_status"/>
+
+                    <TextView
+                        android:id="@+id/signal_strength_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="21sp"
+                        android:text=""/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginTop="24dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/ic_baseline_cloud_upload_24"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/upload_speed"
+                        android:padding="12dp"/>
+
+                    <TextView
+                        android:id="@+id/upload_speed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="@string/upload_speed"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/ic_baseline_cloud_download_24"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/download_speed"
+                        android:padding="12dp"/>
+
+                    <TextView
+                        android:id="@+id/download_speed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="@string/download_speed"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>
