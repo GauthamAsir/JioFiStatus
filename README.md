@@ -1,6 +1,6 @@
 # JioFi Status
 
-Get Jio-Fi battery status and shows a non dismissable notification which shows Jio-Fi battery status
+Gets Jio-Fi battery status and shows a non dismissable notification which shows Jio-Fi battery status
 Notification is displayed via service.
 
 ### How it works
