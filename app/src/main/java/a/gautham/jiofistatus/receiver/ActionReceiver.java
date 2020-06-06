@@ -19,8 +19,8 @@ public class ActionReceiver extends BroadcastReceiver {
 
         if (notificationManager != null) {
             notificationManager.cancel(1);
+            new BackgroundService().stopService();
             android.os.Process.killProcess(android.os.Process.myPid());
-            context.stopService(new Intent(context, BackgroundService.class));
         }
     }
 

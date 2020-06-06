@@ -29,6 +29,7 @@ import a.gautham.jiofistatus.receiver.ActionReceiver;
 public class BackgroundService extends Service {
 
     private Timer timer = new Timer();
+    private int stop = 0;
 
     @Override
     public void onCreate() {
@@ -47,13 +48,23 @@ public class BackgroundService extends Service {
         return null;
     }
 
+    public void stopService(){
+        stop = 1;
+    }
+
     @Override
     public void onDestroy() {
+        if (stop==0){
+            timer.cancel();
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction("RestartService");
+            broadcastIntent.setClass(this, Restarter.class);
+            this.sendBroadcast(broadcastIntent);
+            return;
+        }
+
         timer.cancel();
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction("RestartService");
-        broadcastIntent.setClass(this, Restarter.class);
-        this.sendBroadcast(broadcastIntent);
+        super.onDestroy();
     }
 
     void getData(){
