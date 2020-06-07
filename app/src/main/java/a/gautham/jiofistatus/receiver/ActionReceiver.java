@@ -1,11 +1,10 @@
 package a.gautham.jiofistatus.receiver;
 
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import a.gautham.jiofistatus.service.BackgroundService;
 
 public class ActionReceiver extends BroadcastReceiver {
 
@@ -19,7 +18,9 @@ public class ActionReceiver extends BroadcastReceiver {
 
         if (notificationManager != null) {
             notificationManager.cancel(1);
-            new BackgroundService().stopService();
+            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            assert am != null;
+            am.killBackgroundProcesses(context.getPackageName());
             android.os.Process.killProcess(android.os.Process.myPid());
         }
     }

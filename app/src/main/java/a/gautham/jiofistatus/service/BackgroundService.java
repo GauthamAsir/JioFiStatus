@@ -37,17 +37,13 @@ public class BackgroundService extends Service {
             public void run() {
                 getData();
             }
-        },0,10000);
+        }, 0, 50000);
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    public void stopService(){
-        stopSelf();
     }
 
     @Override

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 new GetData().execute();
             }
-        },0,10000);
+        }, 0, 50000);
 
     }
 
@@ -113,39 +113,44 @@ public class MainActivity extends AppCompatActivity {
                 progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
             }else if (progress<=40){
                 progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FFA500")));
-            }else if (progress<=60){
+            } else if (progress <= 60) {
                 progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#CCCC00")));
-            }else if (progress<=80){
+            } else if (progress <= 80) {
                 progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#198021")));
-            }else {
+            } else {
                 progressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
             }
 
             signal_strength_value.setText(network_signal);
 
-            if (network_signal.equals("Normal")){
-                signal_strength.setImageTintList(ColorStateList.valueOf(Color.BLUE));
-            }else if (network_signal.equals("Weak")){
-                signal_strength.setImageTintList(ColorStateList.valueOf(Color.RED));
-            }else {
-                signal_strength.setImageTintList(ColorStateList.valueOf(Color.GREEN));
+            switch (network_signal) {
+                case "Normal":
+                    signal_strength.setImageTintList(ColorStateList.valueOf(Color.BLUE));
+                    break;
+                case "Weak":
+                case "0":
+                    signal_strength.setImageTintList(ColorStateList.valueOf(Color.RED));
+                    break;
+                default:
+                    signal_strength.setImageTintList(ColorStateList.valueOf(Color.GREEN));
+                    break;
             }
 
-            int up = Integer.parseInt(upSpeed.replace(" bps","")) / 1000;
-            int down = Integer.parseInt(dwSpeed.replace(" bps","")) / 1000;
+            int up = Integer.parseInt(upSpeed.replace(" bps", "")) / 1000;
+            int down = Integer.parseInt(dwSpeed.replace(" bps", "")) / 1000;
 
-            if (up==1000){
-                up = up/1000;
-                upload_speed.setText(String.format(Locale.ENGLISH,"%s mbps",up));
-            }else {
-                upload_speed.setText(String.format(Locale.ENGLISH,"%s kbps",up));
+            if (up >= 1000) {
+                up = up / 1000;
+                upload_speed.setText(String.format(Locale.ENGLISH, "%s mbps", up));
+            } else {
+                upload_speed.setText(String.format(Locale.ENGLISH, "%s kbps", up));
             }
 
-            if (down==1000){
-                down = down/1000;
-                download_speed.setText(String.format(Locale.ENGLISH,"%s mbps",down));
-            }else {
-                download_speed.setText(String.format(Locale.ENGLISH,"%s kbps",down));
+            if (down >= 1000) {
+                down = down / 1000;
+                download_speed.setText(String.format(Locale.ENGLISH, "%s mbps", down));
+            } else {
+                download_speed.setText(String.format(Locale.ENGLISH, "%s kbps", down));
             }
 
         }
