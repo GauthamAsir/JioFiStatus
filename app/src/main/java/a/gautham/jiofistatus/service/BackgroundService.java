@@ -29,7 +29,6 @@ import a.gautham.jiofistatus.receiver.ActionReceiver;
 public class BackgroundService extends Service {
 
     private Timer timer = new Timer();
-    private int stop = 0;
 
     @Override
     public void onCreate() {
@@ -49,22 +48,16 @@ public class BackgroundService extends Service {
     }
 
     public void stopService(){
-        stop = 1;
+        stopSelf();
     }
 
     @Override
     public void onDestroy() {
-        if (stop==0){
-            timer.cancel();
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction("RestartService");
-            broadcastIntent.setClass(this, Restarter.class);
-            this.sendBroadcast(broadcastIntent);
-            return;
-        }
-
         timer.cancel();
-        super.onDestroy();
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("RestartService");
+        broadcastIntent.setClass(this, Restarter.class);
+        this.sendBroadcast(broadcastIntent);
     }
 
     void getData(){
@@ -72,9 +65,11 @@ public class BackgroundService extends Service {
             Document document = Jsoup.connect("http://jiofi.local.html/").get();
             int progress = Integer.parseInt(document.getElementById("batterylevel").val()
                     .replace("%",""));
+
             publishNotification(progress);
         } catch (Exception e){
             System.out.println("Error: "+e.toString());
+            stopService();
         }
     }
 
