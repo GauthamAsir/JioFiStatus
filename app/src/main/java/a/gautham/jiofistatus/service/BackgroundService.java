@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -61,19 +60,20 @@ public class BackgroundService extends Service {
     }
 
     void getData(){
+
         try {
             Document document = Jsoup.connect("http://jiofi.local.html/").get();
             int progress = Integer.parseInt(document.getElementById("batterylevel").val()
                     .replace("%",""));
 
-            publishNotification(progress);
+            publishNotification(progress, null);
         } catch (Exception e){
-            System.out.println("Error: "+e.toString());
-            stopService();
+            System.out.println("Error: " + e.toString());
+            publishNotification(0, e.toString());
         }
     }
 
-    private void publishNotification(int batteryLevel){
+    private void publishNotification(int batteryLevel, String error) {
 
         // Make Channel if SDK is above or equal to Oreo
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -101,13 +101,18 @@ public class BackgroundService extends Service {
                 .setColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
                 .setContentIntent(contentIntent);
 
-        if (batteryLevel<=20){
+        if (error != null && !error.isEmpty()) {
+            builder.setColor(ContextCompat.getColor(this, R.color.red));
+            builder.setContentTitle("Error");
+            builder.addAction(R.drawable.battery_alert, "Stop", pendingIntent);
+            builder.setContentText("Not connected to Jio-Fi");
+        } else if (batteryLevel <= 20) {
             builder.setColor(ContextCompat.getColor(this, R.color.red));
             builder.setContentTitle("Low Battery warning");
-            builder.addAction(R.drawable.battery_alert,"Let's Charge it",pendingIntent);
+            builder.addAction(R.drawable.battery_alert, "Let's Charge it", pendingIntent);
             builder.setContentText("Battery running out " + batteryLevel + "% left");
-        }else {
-            builder.addAction(R.drawable.battery_alert,"Stop",pendingIntent);
+        } else {
+            builder.addAction(R.drawable.battery_alert, "Stop", pendingIntent);
         }
 
         Notification notification = builder.setCategory(Notification.CATEGORY_SERVICE).build();

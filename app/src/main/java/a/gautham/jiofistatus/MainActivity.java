@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,7 +25,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import a.gautham.jiofistatus.service.BackgroundService;
-import a.gautham.jiofistatus.service.Restarter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -154,7 +153,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        startService(new Intent(getApplicationContext(), BackgroundService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(new Intent(getApplicationContext(), BackgroundService.class));
+        } else {
+            startService(new Intent(getApplicationContext(), BackgroundService.class));
+        }
         super.onResume();
     }
 
