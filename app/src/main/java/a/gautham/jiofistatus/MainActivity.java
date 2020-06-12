@@ -25,6 +25,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import a.gautham.jiofistatus.service.BackgroundService;
+import a.gautham.library.AppUpdater;
+import a.gautham.library.helper.Display;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressBar progress_circular;
     private MaterialCardView tools_layout;
+
+    private boolean startNotification = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         error_tv.setVisibility(View.GONE);
         tools_layout.setVisibility(View.GONE);
 
+        AppUpdater appUpdater = new AppUpdater(this);
+        appUpdater.setDisplay(Display.DIALOG);
+        appUpdater.setUpGithub("GauthamAsir", "JioFiStatus");
+        appUpdater.start();
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -62,6 +71,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 0, 50000);
 
+    }
+
+    @Override
+    protected void onResume() {
+        if (startNotification) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(new Intent(getApplicationContext(), BackgroundService.class));
+            } else {
+                startService(new Intent(getApplicationContext(), BackgroundService.class));
+            }
+        }
+        super.onResume();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -75,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 Document document = Jsoup.connect("http://jiofi.local.html/").get();
+                System.out.println(document);
+
                 batteryLevel = document.getElementById("batterylevel").val();
                 network_signal = document.getElementById("signalstrength").val();
                 upSpeed = document.getElementById("ulCurrentDataRate").val();
@@ -95,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
             progress_circular.setVisibility(View.GONE);
 
-            if (o==null) {
+            if (o == null) {
                 error_tv.setText(error);
                 error_tv.setVisibility(View.VISIBLE);
                 return;
@@ -104,21 +127,27 @@ public class MainActivity extends AppCompatActivity {
             tools_layout.setVisibility(View.VISIBLE);
 
             textView.setText(o.toString());
-            int progress = Integer.parseInt(o.toString().replace("%",""));
-            ObjectAnimator.ofInt(progressBar, "progress", progress)
-                    .setDuration(300)
-                    .start();
 
-            if (progress<=20){
-                progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
-            }else if (progress<=40){
-                progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FFA500")));
-            } else if (progress <= 60) {
-                progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#CCCC00")));
-            } else if (progress <= 80) {
-                progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#198021")));
-            } else {
-                progressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+            if (!o.toString().equals("No Battery")) {
+
+                startNotification = true;
+
+                int progress = Integer.parseInt(o.toString().replace("%", ""));
+                ObjectAnimator.ofInt(progressBar, "progress", progress)
+                        .setDuration(300)
+                        .start();
+
+                if (progress <= 20) {
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
+                } else if (progress <= 40) {
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#FFA500")));
+                } else if (progress <= 60) {
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#CCCC00")));
+                } else if (progress <= 80) {
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#198021")));
+                } else {
+                    progressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+                }
             }
 
             signal_strength_value.setText(network_signal);
@@ -154,16 +183,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-    }
-
-    @Override
-    protected void onResume() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(getApplicationContext(), BackgroundService.class));
-        } else {
-            startService(new Intent(getApplicationContext(), BackgroundService.class));
-        }
-        super.onResume();
     }
 
     @Override
